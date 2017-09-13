@@ -159,7 +159,14 @@ namespace Xamarin.Forms.Controls.Issues
 
 			List<string> warnings = new List<string>();
 
-			RunningApp.WaitForElement(q => q.Marked(Next));
+			try
+			{
+				RunningApp.WaitForElement(q => q.Marked(Next), timeout: TimeSpan.FromSeconds(30));
+			}
+			catch (Exception)
+			{
+				Assert.Inconclusive("Timed out waiting for the test to initialize. May be unable to communicate with the API server to get benchmarks.");
+			}
 
 			for (int i = 0; i < testCasesCount; i++)
 			{
